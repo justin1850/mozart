@@ -15,15 +15,75 @@ function setState(playTrue) {
         playBtn.innerHTML = play + " Play";
     }
 }
-//tone.js flattosharpstuff :|
-const flatToSharp = {
-    "Bb": "A#",
-    "Eb": "D#",
-    "Ab": "G#",
-    "Db": "C#",
-    "Gb": "F#",
-    "Cb": "B",
-    "E#": "F",
-    "B#": "C",
-    "Fb": "E"
+
+//obtains and organizes output
+function parseOutput() {
+    const output = document.getElementById("outputText").value.trim();
+    if (!output) return [];
+    return output.split(" ").filter(n => n.length > 0);
 }
+
+//plays the music
+async function playMusic() {
+    await Tone.start();
+    const music = parseOutput();
+
+    //check if output is empty
+    if (music.length == 0) {
+        alert("Make sure that the cipher has generated notes.");
+        return;
+    }
+
+    const synth = new Tone.Sampler({
+	    urls: {
+		    C4: "C4.mp3",
+		    "D#4": "Ds4.mp3",
+		    "F#4": "Fs4.mp3",
+		    A4: "A4.mp3",
+	    },
+	    release: 1,
+	    baseUrl: "https://tonejs.github.io/audio/salamander/",
+    }).toDestination();
+
+    Tone.loaded().then(() => {
+        let index = 0;
+
+        currSeq = new Tone.Sequence((time, note) => {
+            synth.triggerAttackRelease(note, "4n", time);
+            index++;
+
+            if (index >= music.length) {
+                Tone.Transport.stop();
+                currSeq.stop();
+                Tone.Transport.scheduleOnce(() => {
+                    setState(false);
+                }, "+0.1");
+            }
+        }, music.map(note => note + "4"), "4n");
+
+        currSeq.loop = false;
+        Tone.Transport.bpm.value = 80;
+        currSeq.start(0);
+        Tone.Transport.start();
+        setState(true);
+    });
+
+}
+
+//stops playing the music
+function stopMusic() {
+    if (currSeq) {
+        currSeq.stop();
+        currSeq.dispose();
+        currSeq = null;
+    }
+    Tone.Transport.stop();
+    Tone.Transport.cancel();
+    setState(false);
+}
+
+//connects click to the playing of music
+playBtn.addEventListener("click", () => {
+    if (isPlaying) {stopMusic();}
+    else {playMusic();}
+});
