@@ -1,12 +1,12 @@
 // Harmonic Graph
 const Harmgraph = {
-    "do" : ["re"],
-    "re" : ["mi"],
-    "mi" : ["fa"],
-    "fa" : ["so"],
-    "so" : ["la"],
-    "la" : ["ti"],
-    "ti" : ["do"]
+    "do" : ["re", "mi", "fa", "so", "la"],  // I -> ii, iii, IV, V, vi
+    "re" : ["so", "ti"],                    // ii -> V, vii
+    "mi" : ["la", "fa"],                    // iii -> vi, IV
+    "fa" : ["so", "ti"],                    // IV -> V, vii
+    "so" : ["do"],                          // V -> I
+    "la" : ["re", "fa"],                    // vi -> ii, IV
+    "ti" : ["do"]                           // vii -> I
 };
 
 function traverse(start, steps) {
