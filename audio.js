@@ -1,11 +1,11 @@
-//set-up
+// set-up
 let currSeq = null;
 let isPlaying = false;
 const playBtn = document.getElementById("playBtn");
 const play = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>';
 const pause = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>';
 
-//basic functionality to add pausing - incomplete
+// basic functionality to add pausing
 function setState(playTrue) {
     isPlaying = playTrue;
     if (playTrue) {
@@ -16,14 +16,14 @@ function setState(playTrue) {
     }
 }
 
-//obtains and organizes output
+// obtains and organizes output
 function parseOutput() {
     const output = document.getElementById("outputText").value.trim();
     if (!output) return [];
     return output.split(" ").filter(n => n.length > 0);
 }
 
-//plays the music
+// plays the music
 async function playMusic() {
     await Tone.start();
     const music = parseOutput();
@@ -55,9 +55,9 @@ async function playMusic() {
             if (index >= music.length) {
                 Tone.Transport.stop();
                 currSeq.stop();
-                Tone.Transport.scheduleOnce(() => {
-                    setState(false);
-                }, "+0.1");
+                // Tone.Transport.scheduleOnce(() => {
+                setState(false);
+                // }, "+0.1");
             }
         }, music.map(note => note + "4"), "4n");
 
@@ -67,10 +67,9 @@ async function playMusic() {
         Tone.Transport.start();
         setState(true);
     });
-
 }
 
-//stops playing the music
+// stops playing the music
 function stopMusic() {
     if (currSeq) {
         currSeq.stop();
@@ -82,7 +81,7 @@ function stopMusic() {
     setState(false);
 }
 
-//connects click to the playing of music
+// connects click to the playing of music
 playBtn.addEventListener("click", () => {
     if (isPlaying) {stopMusic();}
     else {playMusic();}
