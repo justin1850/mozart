@@ -20,7 +20,9 @@ function setState(playTrue) {
 function parseOutput() {
     const output = document.getElementById("outputText").value.trim();
     if (!output) return [];
-    return output.split(" ").filter(n => n.length > 0);
+    return output.split(" ").filter(n => n.length > 0).map((note, i) => {
+        return {note: note + "4", duration: durations[i] || "4n"};
+    });
 }
 
 // plays the music
@@ -46,23 +48,27 @@ async function playMusic() {
     }).toDestination();
 
     Tone.loaded().then(() => {
-        let index = 0;
+        const durationMap = {"16n": 0.25, "8n": 0.5, "4n": 1.0, "2n": 2.0};
+        let time = 0;
 
-        currSeq = new Tone.Sequence((time, note) => {
-            synth.triggerAttackRelease(note, "4n", time);
-            index++;
+        const events = music.map(item => {
+            const t = time;
+            time += durationMap[item.duration] || 0.5;
+            return [t, item];
+        })
 
-            if (index >= music.length) {
-                Tone.Transport.stop();
-                currSeq.stop();
-                // Tone.Transport.scheduleOnce(() => {
-                setState(false);
-                // }, "+0.1");
-            }
-        }, music.map(note => note + "4"), "4n");
+        currSeq = new Tone.Part((time, item) => {
+            synth.triggerAttackRelease(item.note, item.duration, time);
+        }, events);
 
         currSeq.loop = false;
         Tone.Transport.bpm.value = 80;
+
+        Tone.Transport.scheduleOnce(() => {
+            Tone.Transport.stop();
+            setTimeout(() => setState(false), 100);
+        }, time);
+
         currSeq.start(0);
         Tone.Transport.start();
         setState(true);
