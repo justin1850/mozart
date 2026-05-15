@@ -31,6 +31,11 @@ for (let i = 0; i < LETTERS.length; i++) {
     solfegeMap[letter] = SOLFEGE[i % SOLFEGE.length];
 }
 
+function getOctave(char) {
+    const index = LETTERS.indexOf(char);
+    return 3 + Math.floor(index / 7);
+}
+
 function getScaleDegree(note) {
     return SOLFEGE.indexOf(note) + 1;
 }
@@ -45,18 +50,15 @@ function encryptText(text, key) {
 
         let note = solfegeMap[char];
         let degree = getScaleDegree(note);
+        let octave = getOctave(char);
 
         let path = traverse(note, degree);
-        result.push(path.join(" "));
-    }
-    result = result.join(" ").split(" ");
-    console.log(result);
-    
-    for (let i = 0; i < result.length; i++) {
-        result[i] = convertToLetterNote(result[i], key)
-    }
-    console.log(result);
 
+        for (let step of path) {
+            result.push(convertToLetterNote(step, key, octave));
+        }
+    }
+    console.log(result);
     return result.join(" ");
 }
 
@@ -82,7 +84,7 @@ const musicalKeys = {
     "Ab" : ["Ab", "Bb", "C", "Db", "Eb", "F", "G"]
 }
 
-function convertToLetterNote(note, key) {
+function convertToLetterNote(note, key, octave) {
     degree = getScaleDegree(note) - 1;
-    return musicalKeys[key][degree];
+    return musicalKeys[key][degree] + octave;
 }
