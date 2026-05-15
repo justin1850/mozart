@@ -25,6 +25,8 @@ function parseOutput() {
 
 // plays the music
 async function playMusic() {
+    stopMusic();
+
     await Tone.start();
     const music = parseOutput();
 
@@ -49,6 +51,7 @@ async function playMusic() {
         currSeq = new Tone.Sequence((time, note) => {
             synth.triggerAttackRelease(note, "4n", time);
         }, music, "4n");
+        console.log(currSeq);
 
         currSeq.loop = false;
         Tone.Transport.bpm.value = 80;
@@ -66,13 +69,16 @@ async function playMusic() {
 
 // stops playing the music
 function stopMusic() {
+    Tone.Transport.stop();
+    Tone.Transport.cancel();
+    Tone.Transport.position = 0;
+
     if (currSeq) {
-        currSeq.stop();
+        // currSeq.stop();
         currSeq.dispose();
         currSeq = null;
     }
-    Tone.Transport.stop();
-    Tone.Transport.cancel();
+    
     setState(false);
 }
 
