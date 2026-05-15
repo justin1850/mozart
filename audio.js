@@ -6,14 +6,10 @@ let currSeq = null;
 */
 let isPlaying = false;
 const playBtn = document.getElementById("playBtn");
-/** @constant {string} SVG markup for the play icon on the UI
-*/
+
 const play = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>';
-/** @constant {string} SVG markup for the pause icon on the UI
-*/
 const pause = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:24px;height:24px"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>';
 
-// basic functionality to add pausing
 /** 
  * Updates the play/pause state of the UI and sync the button's icon and label
  * 
@@ -29,7 +25,6 @@ function setState(playTrue) {
     }
 }
 
-// obtains and organizes output
 /** 
  * Reads, trims, and tokenizes the output text field into an array of note strings.
  * 
@@ -48,7 +43,6 @@ function parseOutput() {
     return output.split(" ").filter(n => n.length > 0);
 }
 
-// plays the music
 /**
  * Starts playback of the notes in the output field using a Tone.js piano sampler.
  * Stops any in-progress playback first, then builds a new {@link Tone.Sequence}
@@ -103,7 +97,6 @@ async function playMusic() {
     });
 }
 
-// stops playing the music
 /**
  * Stops all active playback, resets the Tone.js transport to position 0, and disposes of the current sequence.
  *
@@ -125,7 +118,6 @@ function stopMusic() {
     setState(false);
 }
 
-// connects click to the playing of music
 /**
  * Click handler for the play/pause button.
  * Stops music if currently playing; starts it otherwise.
