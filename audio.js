@@ -18,7 +18,13 @@ function setState(playTrue) {
 
 // obtains and organizes output
 function parseOutput() {
-    const output = document.getElementById("outputText").value.trim();
+    //checks whether play button should look at input or output text
+    const isDecrypt = document.getElementById("modeToggle").checked;
+    let sourceID;
+    if (isDecrypt) {sourceID = "inputText";}
+    else {sourceID = "outputText";}
+
+    const output = document.getElementById(sourceID).value.trim();
     if (!output) return [];
     return output.split(" ").filter(n => n.length > 0);
 }
