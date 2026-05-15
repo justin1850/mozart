@@ -46,23 +46,18 @@ async function playMusic() {
     }).toDestination();
 
     Tone.loaded().then(() => {
-        let index = 0;
-
         currSeq = new Tone.Sequence((time, note) => {
             synth.triggerAttackRelease(note, "4n", time);
-            index++;
-
-            if (index >= music.length) {
-                Tone.Transport.stop();
-                currSeq.stop();
-                // Tone.Transport.scheduleOnce(() => {
-                setState(false);
-                // }, "+0.1");
-            }
-        }, music.map(note => note + "4"), "4n");
+        }, music, "4n");
 
         currSeq.loop = false;
         Tone.Transport.bpm.value = 80;
+
+        Tone.Transport.scheduleOnce(() => {
+            Tone.Transport.stop();
+            setTimeout(() => setState(false), 100);
+        }, "+" + (music.length * (60 / 80)));
+
         currSeq.start(0);
         Tone.Transport.start();
         setState(true);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <link href="./src/output.css" rel="stylesheet">
-    <script src="http://unpkg.com/tone"></script>
+    <script src="https://unpkg.com/tone"></script>
 </head>
     <body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center">
         <div class="w-full max-w-2xl bg-white rounded-2xl shadow-md p-6 space-y-6">
@@ -63,7 +63,7 @@
                     <div class="flex items-center space-x-3 text-gray-700">
                         <span class="text-sm">Encrypt</span>
                         <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="modeToggle" class="sr-only peer">
+                        <input type="checkbox" id="modeToggle" class="sr-only peer" aria-label="Toggle between Encrypt and Decrypt">
                         <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-500 transition"></div>
                         <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition peer-checked:translate-x-5"></div>
                         </label>
@@ -94,7 +94,6 @@
                     </button>
                  </div>
             </div>
-
             <!-- Output -->
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-600">
