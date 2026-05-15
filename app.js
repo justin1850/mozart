@@ -3,7 +3,6 @@
  * Reads user input (plaintext or musical text), mode selection (key, ex: C major, F major), and function (encrypting or decrypting the cipher)
  * Writes/Showcases the results to the output field after cipher is run
  */
-
 document.getElementById("submitBtn").addEventListener("click", () => {
     const input = document.getElementById("inputText").value;
     const isDecrypt = document.getElementById("modeToggle").checked;
