@@ -35,12 +35,10 @@ function getScaleDegree(note) {
     return SOLFEGE.indexOf(note) + 1;
 }
 
-let durations = [];
 // Encryption
 function encryptText(text, key) {
     text = text.toUpperCase();
     let result = [];
-    durations = [];
 
     for (let char of text) {
         if (!solfegeMap[char]) continue;
@@ -51,15 +49,14 @@ function encryptText(text, key) {
 
         //depending on the letter, it will play for a different amount of time :)
         const index = LETTERS.indexOf(char);
-        let duration;
-        if (index <= 6) {duration = "16n";}
-        else if (index <= 13) {duration = "8n";}
-        else if (index <= 20) {duration = "4n";}
-        else {duration = "2n";}
+        let octave;
+        if (index <= 6) {octave = 3;}
+        else if (index <= 13) {octave = 4;}
+        else if (index <= 20) {octave = 5;}
+        else {octave = 6;}
 
         for (let i = 0; i < path.length; i++) {
-            result.push(convertToLetterNote(path[i], key));
-            durations.push(duration);
+            result.push(convertToLetterNote(path[i], key) + octave);
         }
     }
     return result.join(" ");

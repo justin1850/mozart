@@ -20,9 +20,7 @@ function setState(playTrue) {
 function parseOutput() {
     const output = document.getElementById("outputText").value.trim();
     if (!output) return [];
-    return output.split(" ").filter(n => n.length > 0).map((note, i) => {
-        return {note: note + "4", duration: durations[i] || "4n"};
-    });
+    return output.split(" ").filter(n => n.length > 0);
 }
 
 // plays the music
@@ -48,18 +46,9 @@ async function playMusic() {
     }).toDestination();
 
     Tone.loaded().then(() => {
-        const durationMap = {"16n": 0.25, "8n": 0.5, "4n": 1.0, "2n": 2.0};
-        let time = 0;
-
-        const events = music.map(item => {
-            const t = time;
-            time += durationMap[item.duration] || 0.5;
-            return [t, item];
-        })
-
-        currSeq = new Tone.Part((time, item) => {
-            synth.triggerAttackRelease(item.note, item.duration, time);
-        }, events);
+        currSeq = new Tone.Sequence((time, note) => {
+            synth.triggerAttackRelease(note, "4n", time);
+        }, music, "4n");
 
         currSeq.loop = false;
         Tone.Transport.bpm.value = 80;
@@ -67,7 +56,7 @@ async function playMusic() {
         Tone.Transport.scheduleOnce(() => {
             Tone.Transport.stop();
             setTimeout(() => setState(false), 100);
-        }, time);
+        }, "+" + (music.length * (60 / 80)));
 
         currSeq.start(0);
         Tone.Transport.start();
