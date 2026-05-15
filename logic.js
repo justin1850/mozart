@@ -9,6 +9,15 @@ const Harmgraph = {
     "ti" : ["do"]                           // vii -> I
 };
 
+/**
+ * Traverses the harmonic graph starting from a given solfege node.
+ * The traversal deterministically cycles through neighboring nodes.
+ *
+ * @param {string} start - Starting solfege note ("do", "re", etc.).
+ * @param {number} steps - Number of traversal steps to perform.
+ * @returns {string[]} Ordered traversal path including the starting node.
+ *
+ */
 function traverse(start, steps) {
     let path = [start];
     let current = start;
@@ -31,16 +40,44 @@ for (let i = 0; i < LETTERS.length; i++) {
     solfegeMap[letter] = SOLFEGE[i % SOLFEGE.length];
 }
 
+/**
+ * Determines the octave number assigned to a letter.
+ * Every group of 7 letters increments the octave.
+ *
+ * @param {string} char - Character in the accpeted list of input characters.
+ * @returns {number} Octave number.
+ *
+ */
 function getOctave(char) {
     const index = LETTERS.indexOf(char);
     return 3 + Math.floor(index / 7);
 }
 
+/**
+ * Converts a solfege note into a scale degree.
+ *
+ * @param {string} note - Solfege syllable.
+ * @returns {number} Scale degree (1-7).
+ *
+ */
 function getScaleDegree(note) {
     return SOLFEGE.indexOf(note) + 1;
 }
 
-// Encryption
+/**
+ * Encrypts plaintext into harmonic note sequences.
+ *
+ * Each letter:
+ * 1. Maps to a solfège note
+ * 2. Determines a traversal length from its scale degree
+ * 3. Traverses the harmonic graph
+ * 4. Converts the traversal into musical notes within the selected key
+ *
+ * @param {string} text - Plaintext message.
+ * @param {string} key - Musical key signature/key of the cipher.
+ * @returns {string} Space delimited musical notes.
+ *
+ */
 function encryptText(text, key) {
     text = text.toUpperCase();
     let result = [];
@@ -62,6 +99,19 @@ function encryptText(text, key) {
     return result.join(" ");
 }
 
+/**
+ * Decrypts an encrypted harmonic note sequence back into plaintext.
+ *
+ * The function reconstructs possible harmonic traversals and validates
+ * them against the encrypted sequence using the provided key.
+ *
+ * If traversal reconstruction fails, the key is incorrect.
+ *
+ * @param {string} text - Encrypted note sequence.
+ * @param {string} key - Musical key signature used during encryption/key of cipher.
+ * @returns {string} Decrypted plaintext or failure message.
+ *
+ */
 function decryptText(text, key) {
     const notes = text.trim().split(/\s+/);
 
@@ -149,6 +199,16 @@ const musicalKeys = {
     "Ab" : ["Ab", "Bb", "C", "Db", "Eb", "F", "G"]
 }
 
+/**
+ * Converts a solfege note into a concrete musical note
+ * within a specified key and octave.
+ *
+ * @param {string} note - Solfege note.
+ * @param {string} key - Musical key signature.
+ * @param {number} octave - Octave number.
+ * @returns {string} Musical note with octave.
+ *
+ */
 function convertToLetterNote(note, key, octave) {
     degree = getScaleDegree(note) - 1;
     return musicalKeys[key][degree] + octave;
