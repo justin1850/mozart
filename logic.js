@@ -63,7 +63,72 @@ function encryptText(text, key) {
 }
 
 function decryptText(text, key) {
-    return false;
+    const notes = text.trim().split(/\s+/);
+
+    let result = "";
+    let i = 0;
+
+    while (i < notes.length) {
+        let foundMatch = false;
+
+        // try every scale degree
+        for (let degreeIndex = 0; degreeIndex < SOLFEGE.length; degreeIndex++) {
+            const startSolfege = SOLFEGE[degreeIndex];
+
+            // reconstruct expected traversal path
+            const expectedPath = traverse(startSolfege, degreeIndex+1);
+
+            const match = notes[i].match(/^([A-G][b#]?)(\d+)$/);
+            if (!match) {
+                continue;
+            }
+            const octave = parseInt(match[2]);
+
+            const expectedNotes = expectedPath.map(step =>
+                convertToLetterNote(step, key, octave)
+            );
+
+            // compare encrypted sequence
+            const slice = notes.slice(i, i + expectedNotes.length);
+
+            let matches = true;
+            for (let j = 0; j < expectedNotes.length; j++) {
+                if (slice[j] !== expectedNotes[j]) {
+                    matches = false;
+                    break;
+                }
+            }
+
+            if (!matches) {
+                continue;
+            }
+
+            // recover original character
+            let recovered = null;
+            for (let letter of LETTERS) {
+                if (solfegeMap[letter] === startSolfege && getOctave(letter) === octave) {
+                    recovered = letter;
+                    break;
+                }
+            }
+
+            if (!recovered) {
+                continue;
+            }
+
+            result += recovered;
+
+            i += expectedNotes.length;
+
+            foundMatch = true;
+            break;
+        }
+
+        if (!foundMatch) {
+            return `Decryption Failed using "${key}"`;
+        }
+    }
+    return result.toLowerCase();
 }
 
 const musicalKeys = {
