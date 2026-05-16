@@ -7,7 +7,6 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     const input = document.getElementById("inputText").value;
     const isDecrypt = document.getElementById("modeToggle").checked;
     const key = document.getElementById("keySelect").value;
-    console.log(key)
 
     let output;
 

@@ -81,8 +81,7 @@ async function playMusic() {
         currSeq = new Tone.Sequence((time, note) => {
             synth.triggerAttackRelease(note, "4n", time);
         }, music, "4n");
-        console.log(currSeq);
-
+        
         currSeq.loop = false;
         Tone.Transport.bpm.value = 80;
 
