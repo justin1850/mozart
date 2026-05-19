@@ -118,7 +118,6 @@ function encryptText(text, key) {
             result.push(convertToLetterNote(step, key, octave));
         }
     }
-    console.log(result);
     return result.join(" ");
 }
 
