@@ -22,15 +22,13 @@ harmonicGraph.addEdge("la","fa"); //VI -> IV
 
 harmonicGraph.addEdge("ti","do"); //VII -> I
 
-// const Harmgraph = {
-//     "do" : ["re", "mi", "fa", "so", "la"],  // I -> ii, iii, IV, V, vi
-//     "re" : ["so", "ti"],                    // ii -> V, vii
-//     "mi" : ["la", "fa"],                    // iii -> vi, IV
-//     "fa" : ["so", "ti"],                    // IV -> V, vii
-//     "so" : ["do"],                          // V -> I
-//     "la" : ["re", "fa"],                    // vi -> ii, IV
-//     "ti" : ["do"]                           // vii -> I
-// };
+// I -> ii, iii, IV, V, vi
+// ii -> V, vii
+// iii -> vi, IV
+// IV -> V, vii
+// V -> I
+// vi -> ii, IV
+// vii -> I
 
 /**
  * Traverses the harmonic graph starting from a given solfege node.
@@ -39,6 +37,8 @@ harmonicGraph.addEdge("ti","do"); //VII -> I
  * @param {string} start - Starting solfege note ("do", "re", etc.).
  * @param {number} steps - Number of traversal steps to perform.
  * @returns {string[]} Ordered traversal path including the starting node.
+ * 
+ * Time complexity of O(d) given that d is the scale degree.
  *
  */
 function traverse(start, steps) {
@@ -99,6 +99,8 @@ function getScaleDegree(note) {
  * @param {string} text - Plaintext message.
  * @param {string} key - Musical key signature/key of the cipher.
  * @returns {string} Space delimited musical notes.
+ * 
+ * Time Complexity of O(n * d) given that n is the length of the input and d is the scale degree of each input.
  *
  */
 function encryptText(text, key) {
@@ -132,6 +134,8 @@ function encryptText(text, key) {
  * @param {string} text - Encrypted note sequence.
  * @param {string} key - Musical key signature used during encryption/key of cipher.
  * @returns {string} Decrypted plaintext or failure message.
+ * 
+ * Time Complexity of O(m * d) given that m is the number of notes in the input and d is the scale degree of each input.
  *
  */
 function decryptText(text, key) {
