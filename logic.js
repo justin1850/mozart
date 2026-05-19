@@ -1,13 +1,36 @@
 // Harmonic Graph
-const Harmgraph = {
-    "do" : ["re", "mi", "fa", "so", "la"],  // I -> ii, iii, IV, V, vi
-    "re" : ["so", "ti"],                    // ii -> V, vii
-    "mi" : ["la", "fa"],                    // iii -> vi, IV
-    "fa" : ["so", "ti"],                    // IV -> V, vii
-    "so" : ["do"],                          // V -> I
-    "la" : ["re", "fa"],                    // vi -> ii, IV
-    "ti" : ["do"]                           // vii -> I
-};
+const harmonicGraph = new Graph();
+harmonicGraph.addEdge("do","re"); //I -> II
+harmonicGraph.addEdge("do","mi"); //I -> III
+harmonicGraph.addEdge("do","fa"); //I -> IV
+harmonicGraph.addEdge("do","so"); //I -> V
+harmonicGraph.addEdge("do","la"); //I -> VI
+
+harmonicGraph.addEdge("re","so"); //II -> V
+harmonicGraph.addEdge("re","ti"); //II -> VII
+
+harmonicGraph.addEdge("mi","la"); //III -> VI
+harmonicGraph.addEdge("mi","fa"); //III -> IV
+
+harmonicGraph.addEdge("fa","so"); //IV -> V
+harmonicGraph.addEdge("fa","ti"); //IV -> VII
+
+harmonicGraph.addEdge("so","do"); //V -> I
+
+harmonicGraph.addEdge("la","re"); //VI -> II
+harmonicGraph.addEdge("la","fa"); //VI -> IV
+
+harmonicGraph.addEdge("ti","do"); //VII -> I
+
+// const Harmgraph = {
+//     "do" : ["re", "mi", "fa", "so", "la"],  // I -> ii, iii, IV, V, vi
+//     "re" : ["so", "ti"],                    // ii -> V, vii
+//     "mi" : ["la", "fa"],                    // iii -> vi, IV
+//     "fa" : ["so", "ti"],                    // IV -> V, vii
+//     "so" : ["do"],                          // V -> I
+//     "la" : ["re", "fa"],                    // vi -> ii, IV
+//     "ti" : ["do"]                           // vii -> I
+// };
 
 /**
  * Traverses the harmonic graph starting from a given solfege node.
@@ -23,7 +46,7 @@ function traverse(start, steps) {
     let current = start;
 
     for (let i = 0; i < steps; i++) {
-        let neighbors = Harmgraph[current];
+        let neighbors = harmonicGraph.getNeighbors(current);
         current = neighbors[i % neighbors.length];
         path.push(current);
     }
@@ -210,6 +233,6 @@ const musicalKeys = {
  *
  */
 function convertToLetterNote(note, key, octave) {
-    degree = getScaleDegree(note) - 1;
+    let degree = getScaleDegree(note) - 1;
     return musicalKeys[key][degree] + octave;
 }
