@@ -3,6 +3,8 @@
 ## Overview
 Music Cipher is a browser-based encryption and decryption tool that converts text into musical note syntax and back into readable text. Users can also play the generated notes as audio.
 
+Credits: Justin Dai (justin1850), Pranav Adiga (bjsjkw), Rinav Battula (DeveloperRB161)
+
 ---
 
 ## Setup
